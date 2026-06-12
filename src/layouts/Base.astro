@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { asset } from '../lib/url';
+import { OG_LOCALE, type Lang } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -11,9 +12,14 @@ interface Props {
   image?: string;
   /** Forzar noindex aunque estemos en producción (p. ej. /gracias/). */
   noindex?: boolean;
+  /** Idioma de la página. ES por defecto. */
+  lang?: Lang;
+  /** URL (con base) de esta misma página en el otro idioma → hreflang + switcher. */
+  altHref?: string;
 }
 
-const { title, description, image, noindex = false } = Astro.props;
+const { title, description, image, noindex = false, lang = 'es', altHref } = Astro.props;
+const altLang: Lang = lang === 'es' ? 'en' : 'es';
 
 // En cualquier entorno que no sea producción, noindex global.
 const isProd = import.meta.env.TNF_IS_PROD;
@@ -21,6 +27,7 @@ const robots = !isProd || noindex ? 'noindex, follow' : 'index, follow';
 
 // Canonical absoluto (respeta site + ruta actual).
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const altAbs = altHref ? new URL(altHref, Astro.site).href : undefined;
 const ogImage = new URL(asset(image ?? 'apple-touch-icon.png'), Astro.site).href;
 
 const fullTitle = title.includes('Tenerife Coworking')
@@ -29,7 +36,7 @@ const fullTitle = title.includes('Tenerife Coworking')
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,6 +45,15 @@ const fullTitle = title.includes('Tenerife Coworking')
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      altAbs && (
+        <>
+          <link rel="alternate" hreflang={lang} href={canonical} />
+          <link rel="alternate" hreflang={altLang} href={altAbs} />
+          <link rel="alternate" hreflang="x-default" href={lang === 'es' ? canonical : altAbs} />
+        </>
+      )
+    }
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -45,7 +61,8 @@ const fullTitle = title.includes('Tenerife Coworking')
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    {altAbs && <meta property="og:locale:alternate" content={OG_LOCALE[altLang]} />}
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Tema del navegador según modo -->
@@ -76,10 +93,10 @@ const fullTitle = title.includes('Tenerife Coworking')
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <Header />
+    <Header lang={lang} altHref={altHref} />
     <main class="flex-1">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

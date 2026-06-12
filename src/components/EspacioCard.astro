@@ -2,7 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import { url, asset } from '../lib/url';
 import { formatPrecio } from '../lib/format';
-import { TIPO_LABEL } from '../content.config';
+import { TIPO_LABEL, TIPO_LABEL_EN } from '../content.config';
+import type { Lang } from '../lib/i18n';
 
 interface Props {
   espacio: {
@@ -24,11 +25,16 @@ interface Props {
       disponible?: boolean;
     };
   };
+  lang?: Lang;
 }
 
-const { espacio } = Astro.props;
+const { espacio, lang = 'es' } = Astro.props;
 const d = espacio.data;
+// Las fichas son solo ES por ahora; desde el catálogo EN se enlaza a la ficha ES.
 const href = url(`espacios/${espacio.id}`);
+
+const tipoLabel = (lang === 'en' ? TIPO_LABEL_EN : TIPO_LABEL)[d.tipo];
+const notAvailable = lang === 'en' ? 'Not available' : 'No disponible';
 
 // Icono representativo según el tipo de espacio.
 const TIPO_ICON: Record<string, string> = {
@@ -67,12 +73,12 @@ const icon = TIPO_ICON[d.tipo] ?? 'lucide:map-pin';
     <span
       class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[var(--card)]/90 backdrop-blur text-xs font-semibold text-[var(--text-soft)]"
     >
-      {TIPO_LABEL[d.tipo]}
+      {tipoLabel}
     </span>
     {
       d.disponible === false && (
         <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-ink-900/80 text-xs font-semibold text-white">
-          No disponible
+          {notAvailable}
         </span>
       )
     }
@@ -85,7 +91,7 @@ const icon = TIPO_ICON[d.tipo] ?? 'lucide:map-pin';
       <span>{d.municipio}{d.zona ? `, ${d.zona}` : ''} · {d.isla}</span>
     </div>
 
-    <h3 class="font-display font-bold text-[var(--text)] leading-snug mb-2 group-hover:text-brand-600 transition">
+    <h3 class="font-display font-bold text-[var(--text)] leading-snug mb-2 group-hover:text-[var(--accent-strong)] transition">
       {d.title}
     </h3>
 
@@ -111,7 +117,7 @@ const icon = TIPO_ICON[d.tipo] ?? 'lucide:map-pin';
           )
         }
       </div>
-      <span class="text-sm font-bold text-brand-600">
+      <span class="text-sm font-bold text-[var(--accent-strong)]">
         {formatPrecio(d.precio, d.precioPeriodo, d.precioDesde)}
       </span>
     </div>

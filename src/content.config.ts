@@ -37,6 +37,18 @@ export const TIPO_LABEL: Record<(typeof TIPOS)[number], string> = {
   'otro': 'Otro',
 };
 
+// Etiquetas en inglés (catálogo EN).
+export const TIPO_LABEL_EN: Record<(typeof TIPOS)[number], string> = {
+  'oficina': 'Office',
+  'despacho': 'Private office',
+  'sala-reuniones': 'Meeting room',
+  'coworking': 'Coworking desk',
+  'local-comercial': 'Retail space',
+  'nave': 'Warehouse',
+  'espacio-eventos': 'Event space',
+  'otro': 'Other',
+};
+
 // Colección "espacios": un .md por espacio bajo src/content/espacios/.
 const espacios = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/espacios' }),

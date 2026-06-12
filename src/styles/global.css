@@ -51,7 +51,8 @@
   --text-soft: #423b30;      /* texto secundario */
   --text-muted: #7d7361;     /* texto terciario */
   --accent: #fbbf2d;
-  --accent-strong: #d4880a;
+  /* Tono más oscuro en claro: contraste AA sobre fondos claros (precios, enlaces). */
+  --accent-strong: #b06a0c;
   --on-accent: #1a1611;      /* texto sobre amarillo */
 }
 

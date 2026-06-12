@@ -1,23 +1,24 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Base from '../layouts/Base.astro';
-import LeadForm from '../components/LeadForm.astro';
-import { url } from '../lib/url';
+import Base from '../../layouts/Base.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { url } from '../../lib/url';
 ---
 
 <Base
-  title="Contacto"
-  description="Ponte en contacto con Tenerife Coworking. Te ayudamos a encontrar tu espacio de trabajo en cualquier isla de Canarias."
-  altHref={url('en/contact')}
+  title="Contact"
+  description="Get in touch with Tenerife Coworking. We help you find your workspace on any of the Canary Islands."
+  lang="en"
+  altHref={url('contacto')}
 >
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
     <div class="grid lg:grid-cols-2 gap-12">
       <!-- Info -->
       <div>
-        <h1 class="text-4xl font-extrabold text-[var(--text)] mb-4">Hablemos</h1>
+        <h1 class="text-4xl font-extrabold text-[var(--text)] mb-4">Let's talk</h1>
         <p class="text-lg text-[var(--text-soft)] mb-8">
-          ¿Buscas un espacio, quieres publicar el tuyo o tienes cualquier duda?
-          Escríbenos y te respondemos lo antes posible.
+          Looking for a space, want to list yours, or have any questions?
+          Write to us and we'll get back to you as soon as possible.
         </p>
 
         <div class="space-y-4">
@@ -39,16 +40,16 @@ import { url } from '../lib/url';
               <Icon name="lucide:map-pin" class="w-5 h-5" />
             </div>
             <div>
-              <p class="text-xs text-[var(--text-muted)]">Zona de servicio</p>
-              <p class="font-semibold text-[var(--text)]">Todas las islas Canarias</p>
+              <p class="text-xs text-[var(--text-muted)]">Service area</p>
+              <p class="font-semibold text-[var(--text)]">All the Canary Islands</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Formulario -->
+      <!-- Form -->
       <div class="rounded-3xl border border-[var(--card-border)] bg-[var(--card)] p-6 sm:p-8">
-        <LeadForm tipo="inquilino" cta="Enviar mensaje" />
+        <LeadForm tipo="inquilino" cta="Send message" lang="en" />
       </div>
     </div>
   </div>

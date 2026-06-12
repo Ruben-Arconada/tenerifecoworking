@@ -38,8 +38,8 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      // /gracias/ es post-envío (noindex): fuera del sitemap.
-      filter: (page) => !page.includes('/gracias/'),
+      // Páginas post-envío (noindex): fuera del sitemap.
+      filter: (page) => !page.includes('/gracias/') && !page.includes('/thanks/'),
     }),
     icon({
       include: {

@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
-import Base from '../layouts/Base.astro';
-import EspacioCard from '../components/EspacioCard.astro';
-import { url } from '../lib/url';
+import Base from '../../layouts/Base.astro';
+import EspacioCard from '../../components/EspacioCard.astro';
+import { url } from '../../lib/url';
 
 const espacios = await getCollection('espacios', ({ data }) => !data.draft);
 const destacados = espacios
@@ -14,26 +14,27 @@ const destacados = espacios
 const pasos = [
   {
     icon: 'lucide:search',
-    title: 'Cuéntanos qué buscas',
-    text: 'Dinos zona, tipo de espacio y para cuántas personas. O explora el catálogo directamente.',
+    title: 'Tell us what you need',
+    text: 'Area, type of space and team size. Or browse the catalogue directly.',
   },
   {
     icon: 'lucide:handshake',
-    title: 'Te conectamos',
-    text: 'Filtramos entre los espacios disponibles y te ponemos en contacto con los que encajan.',
+    title: 'We connect you',
+    text: 'We filter the available spaces and put you in touch with the ones that fit.',
   },
   {
     icon: 'lucide:key-round',
-    title: 'Cierras el alquiler',
-    text: 'Visitas, negocias y firmas. Nosotros te acompañamos en todo el proceso.',
+    title: 'You close the deal',
+    text: 'Visit, negotiate and sign. We accompany you through the whole process.',
   },
 ];
 ---
 
 <Base
-  title="Tenerife Coworking · Alquiler de espacios en Canarias"
-  description="Intermediación en alquiler de oficinas, salas, locales y coworkings en todas las islas Canarias. Encuentra tu espacio o publica el tuyo."
-  altHref={url('en')}
+  title="Tenerife Coworking · Workspace rentals in the Canary Islands"
+  description="Brokerage for offices, meeting rooms, retail spaces and coworking desks across all the Canary Islands. Find your space or list yours."
+  lang="en"
+  altHref={url('')}
 >
   <!-- Hero -->
   <section class="relative overflow-hidden">
@@ -47,70 +48,71 @@ const pasos = [
           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-400/20 text-brand-700 text-sm font-semibold mb-6"
         >
           <Icon name="lucide:map-pin" class="w-4 h-4" />
-          Todas las islas Canarias
+          All the Canary Islands
         </span>
         <h1 class="text-4xl sm:text-6xl font-extrabold text-[var(--text)] leading-[1.05] mb-6">
-          Tu próximo espacio de trabajo,
-          <span class="text-brand-500">a un clic.</span>
+          Your next workspace,
+          <span class="text-brand-500">one click away.</span>
         </h1>
         <p class="text-lg sm:text-xl text-[var(--text-soft)] max-w-2xl mb-8">
-          Oficinas, salas de reuniones, locales y puestos de coworking en todas
-          las islas. Te ayudamos a encontrar el sitio perfecto — o a alquilar el
-          tuyo.
+          Offices, meeting rooms, retail spaces and coworking desks across all
+          the islands. We help you find the perfect spot — or rent out yours.
         </p>
         <div class="flex flex-col sm:flex-row gap-3">
           <a
-            href={url('espacios')}
+            href={url('en/spaces')}
             class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-400 text-[var(--on-accent)] font-bold transition hover:bg-brand-300"
           >
             <Icon name="lucide:search" class="w-5 h-5" />
-            Buscar espacio
+            Find a space
           </a>
           <a
-            href={url('publica-tu-espacio')}
+            href={url('en/list-your-space')}
             class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-[var(--card-border)] bg-[var(--card)] text-[var(--text)] font-bold transition hover:border-brand-400"
           >
             <Icon name="lucide:plus-circle" class="w-5 h-5" />
-            Publicar mi espacio
+            List my space
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Espacios destacados -->
+  <!-- Featured spaces -->
   {
     destacados.length > 0 && (
       <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
         <div class="flex items-end justify-between gap-4 mb-8">
           <div>
-            <h2 class="text-3xl font-bold text-[var(--text)] mb-2">Espacios destacados</h2>
-            <p class="text-[var(--text-muted)]">Una selección de lo que tenemos disponible ahora.</p>
+            <h2 class="text-3xl font-bold text-[var(--text)] mb-2">Featured spaces</h2>
+            <p class="text-[var(--text-muted)]">
+              A selection of what's available right now. Listings are in Spanish for the time being.
+            </p>
           </div>
           <a
-            href={url('espacios')}
+            href={url('en/spaces')}
             class="hidden sm:inline-flex items-center gap-1 text-[var(--accent-strong)] font-semibold hover:gap-2 transition-all"
           >
-            Ver todos
+            View all
             <Icon name="lucide:arrow-right" class="w-4 h-4" />
           </a>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {destacados.map((espacio) => (
-            <EspacioCard espacio={espacio} />
+            <EspacioCard espacio={espacio} lang="en" />
           ))}
         </div>
       </section>
     )
   }
 
-  <!-- Cómo funciona -->
+  <!-- How it works -->
   <section class="bg-[var(--surface-2)] border-y border-[var(--card-border)]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-      <h2 class="text-3xl font-bold text-[var(--text)] text-center mb-3">Cómo funciona</h2>
+      <h2 class="text-3xl font-bold text-[var(--text)] text-center mb-3">How it works</h2>
       <p class="text-[var(--text-muted)] text-center max-w-xl mx-auto mb-12">
-        Somos intermediarios: te ahorramos la búsqueda y solo cobramos comisión
-        cuando se cierra el alquiler.
+        We're brokers: we save you the search and only charge a commission when
+        the rental closes.
       </p>
       <div class="grid md:grid-cols-3 gap-8">
         {
@@ -131,25 +133,25 @@ const pasos = [
     </div>
   </section>
 
-  <!-- CTA propietarios -->
+  <!-- Owners CTA -->
   <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
     <div
       class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-400 to-brand-500 px-8 py-14 sm:px-14"
     >
       <div class="relative max-w-2xl">
         <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 mb-4">
-          ¿Tienes un espacio sin uso?
+          Got an unused space?
         </h2>
         <p class="text-ink-900/80 text-lg mb-8">
-          Publícalo gratis. Solo cobramos una comisión cuando conseguimos
-          alquilarlo. Sin cuotas, sin permanencia.
+          List it for free. We only charge a commission when we get it rented.
+          No fees, no lock-in.
         </p>
         <a
-          href={url('publica-tu-espacio')}
+          href={url('en/list-your-space')}
           class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-ink-900 text-white font-bold transition hover:bg-ink-800"
         >
           <Icon name="lucide:plus-circle" class="w-5 h-5" />
-          Publicar mi espacio
+          List my space
         </a>
       </div>
       <Icon

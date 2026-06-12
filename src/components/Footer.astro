@@ -1,23 +1,72 @@
 ---
 import { url, asset } from '../lib/url';
+import { langUrl, type Lang } from '../lib/i18n';
 
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'es' } = Astro.props;
 const year = new Date().getFullYear();
+
+const T = {
+  es: {
+    tagline:
+      'Intermediación en alquiler de espacios de trabajo en todas las islas Canarias. Encuentra tu sitio o publica el tuyo.',
+    colSpaces: 'Espacios',
+    allSpaces: 'Todos los espacios',
+    offices: 'Oficinas',
+    meetingRooms: 'Salas de reuniones',
+    coworking: 'Coworking',
+    colBrand: 'Tenerife Coworking',
+    listYour: 'Publica tu espacio',
+    contact: 'Contacto',
+    legalLabel: 'Legal',
+    legalNotice: 'Aviso legal',
+    privacy: 'Privacidad',
+    cookies: 'Cookies',
+    spacesPath: 'espacios',
+    listPath: 'publica-tu-espacio',
+    contactPath: 'contacto',
+  },
+  en: {
+    tagline:
+      'Workspace rental brokerage across all the Canary Islands. Find your spot or list yours.',
+    colSpaces: 'Spaces',
+    allSpaces: 'All spaces',
+    offices: 'Offices',
+    meetingRooms: 'Meeting rooms',
+    coworking: 'Coworking',
+    colBrand: 'Tenerife Coworking',
+    listYour: 'List your space',
+    contact: 'Contact',
+    legalLabel: 'Legal',
+    legalNotice: 'Legal notice',
+    privacy: 'Privacy',
+    cookies: 'Cookies',
+    spacesPath: 'en/spaces',
+    listPath: 'en/list-your-space',
+    contactPath: 'en/contact',
+  },
+}[lang];
+
+const spacesUrl = url(T.spacesPath);
 
 const cols = [
   {
-    title: 'Espacios',
+    title: T.colSpaces,
     links: [
-      { label: 'Todos los espacios', href: url('espacios') },
-      { label: 'Oficinas', href: `${url('espacios')}?tipo=oficina` },
-      { label: 'Salas de reuniones', href: `${url('espacios')}?tipo=sala-reuniones` },
-      { label: 'Coworking', href: `${url('espacios')}?tipo=coworking` },
+      { label: T.allSpaces, href: spacesUrl },
+      { label: T.offices, href: `${spacesUrl}?tipo=oficina` },
+      { label: T.meetingRooms, href: `${spacesUrl}?tipo=sala-reuniones` },
+      { label: T.coworking, href: `${spacesUrl}?tipo=coworking` },
     ],
   },
   {
-    title: 'Tenerife Coworking',
+    title: T.colBrand,
     links: [
-      { label: 'Publica tu espacio', href: url('publica-tu-espacio') },
-      { label: 'Contacto', href: url('contacto') },
+      { label: T.listYour, href: url(T.listPath) },
+      { label: T.contact, href: url(T.contactPath) },
     ],
   },
 ];
@@ -28,16 +77,13 @@ const cols = [
     <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
       <!-- Marca -->
       <div class="md:col-span-2">
-        <a href={url()} class="flex items-center gap-2.5 mb-3" aria-label="Tenerife Coworking — inicio">
+        <a href={langUrl(lang)} class="flex items-center gap-2.5 mb-3" aria-label="Tenerife Coworking — inicio">
           <img src={asset('logo.png')} alt="" width="40" height="40" class="rounded-lg" />
           <span class="font-display font-extrabold text-[var(--text)]">
             Tenerife<span class="text-brand-500">Coworking</span>
           </span>
         </a>
-        <p class="text-sm text-[var(--text-muted)] max-w-xs">
-          Intermediación en alquiler de espacios de trabajo en todas las islas
-          Canarias. Encuentra tu sitio o publica el tuyo.
-        </p>
+        <p class="text-sm text-[var(--text-muted)] max-w-xs">{T.tagline}</p>
       </div>
 
       {
@@ -47,7 +93,7 @@ const cols = [
             <ul class="space-y-2">
               {col.links.map((l) => (
                 <li>
-                  <a href={l.href} class="text-sm text-[var(--text-muted)] hover:text-brand-500 transition">
+                  <a href={l.href} class="text-sm text-[var(--text-muted)] hover:text-[var(--accent-strong)] transition">
                     {l.label}
                   </a>
                 </li>
@@ -62,11 +108,11 @@ const cols = [
       class="mt-10 pt-6 border-t border-[var(--card-border)] flex flex-col sm:flex-row gap-3 justify-between text-xs text-[var(--text-muted)]"
     >
       <p>&copy; {year} tenerifecoworking.es · Islas Canarias, España</p>
-      <nav class="flex flex-wrap gap-x-4 gap-y-1" aria-label="Legal">
-        <a href={url('aviso-legal')} class="hover:text-brand-500 transition">Aviso legal</a>
-        <a href={url('privacidad')} class="hover:text-brand-500 transition">Privacidad</a>
-        <a href={url('cookies')} class="hover:text-brand-500 transition">Cookies</a>
-        <a href={`mailto:info@tenerifecoworking.es`} class="hover:text-brand-500 transition">
+      <nav class="flex flex-wrap gap-x-4 gap-y-1" aria-label={T.legalLabel}>
+        <a href={url('aviso-legal')} class="hover:text-[var(--accent-strong)] transition">{T.legalNotice}</a>
+        <a href={url('privacidad')} class="hover:text-[var(--accent-strong)] transition">{T.privacy}</a>
+        <a href={url('cookies')} class="hover:text-[var(--accent-strong)] transition">{T.cookies}</a>
+        <a href={`mailto:info@tenerifecoworking.es`} class="hover:text-[var(--accent-strong)] transition">
           info@tenerifecoworking.es
         </a>
       </nav>

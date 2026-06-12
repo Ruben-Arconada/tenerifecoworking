@@ -1,55 +1,56 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Base from '../layouts/Base.astro';
-import LeadForm from '../components/LeadForm.astro';
-import { url } from '../lib/url';
+import Base from '../../layouts/Base.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { url } from '../../lib/url';
 
 const ventajas = [
   {
     icon: 'lucide:badge-euro',
-    title: 'Solo pagas si alquilamos',
-    text: 'Sin cuotas mensuales ni permanencia. Cobramos una comisión únicamente cuando se cierra el alquiler.',
+    title: 'You only pay if we rent it',
+    text: 'No monthly fees, no lock-in. We charge a commission only when the rental closes.',
   },
   {
     icon: 'lucide:megaphone',
-    title: 'Damos visibilidad a tu espacio',
-    text: 'Lo publicamos en la web y lo movemos entre quienes buscan espacio en tu isla.',
+    title: 'We give your space visibility',
+    text: 'We publish it on the site and promote it among people looking for space on your island.',
   },
   {
     icon: 'lucide:shield-check',
-    title: 'Filtramos los contactos',
-    text: 'Te pasamos solo interesados reales, ya cribados. Tú decides con quién hablas.',
+    title: 'We filter the contacts',
+    text: 'You only get genuinely interested, pre-screened enquiries. You decide who you talk to.',
   },
   {
     icon: 'lucide:clock',
-    title: 'Te ahorramos tiempo',
-    text: 'Nos ocupamos de la difusión y la primera toma de contacto. Tú solo recibes a quien encaja.',
+    title: 'We save you time',
+    text: 'We handle the promotion and the first contact. You only meet the ones that fit.',
   },
 ];
 ---
 
 <Base
-  title="Publica tu espacio"
-  description="Publica tu oficina, local o sala en Tenerife Coworking. Sin cuotas: solo cobramos comisión cuando conseguimos alquilarlo."
-  altHref={url('en/list-your-space')}
+  title="List your space"
+  description="List your office, retail space or meeting room on Tenerife Coworking. No fees: we only charge a commission when we get it rented."
+  lang="en"
+  altHref={url('publica-tu-espacio')}
 >
   <!-- Hero -->
   <section class="bg-gradient-to-br from-brand-100 to-[var(--surface)] border-b border-[var(--card-border)]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
       <div class="max-w-2xl">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-[var(--text)] mb-5">
-          ¿Tienes un espacio sin uso? <span class="text-brand-500">Hagámoslo rentable.</span>
+          Got an unused space? <span class="text-brand-500">Let's make it earn.</span>
         </h1>
         <p class="text-lg text-[var(--text-soft)]">
-          Publica tu oficina, local, nave o sala en Tenerife Coworking. Sin
-          cuotas ni permanencia: solo cobramos una comisión cuando conseguimos
-          alquilarlo.
+          List your office, retail space, warehouse or meeting room on Tenerife
+          Coworking. No fees, no lock-in: we only charge a commission when we
+          get it rented.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Ventajas -->
+  <!-- Benefits -->
   <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
     <div class="grid sm:grid-cols-2 gap-6">
       {
@@ -68,15 +69,15 @@ const ventajas = [
     </div>
   </section>
 
-  <!-- Formulario -->
+  <!-- Form -->
   <section class="max-w-3xl mx-auto px-4 sm:px-6 pb-20">
     <div class="rounded-3xl border border-[var(--card-border)] bg-[var(--card)] p-6 sm:p-10">
-      <h2 class="text-2xl font-bold text-[var(--text)] mb-2">Cuéntanos sobre tu espacio</h2>
+      <h2 class="text-2xl font-bold text-[var(--text)] mb-2">Tell us about your space</h2>
       <p class="text-[var(--text-muted)] mb-8">
-        Rellena el formulario y te contactamos para conocer los detalles y
-        publicarlo. Es gratis.
+        Fill in the form and we'll get in touch to learn the details and
+        publish it. It's free.
       </p>
-      <LeadForm tipo="propietario" cta="Publicar mi espacio" />
+      <LeadForm tipo="propietario" cta="List my space" lang="en" />
     </div>
   </section>
 </Base>

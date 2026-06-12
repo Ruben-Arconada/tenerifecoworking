@@ -1,37 +1,38 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Base from '../layouts/Base.astro';
-import { url } from '../lib/url';
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
 ---
 
 <Base
-  title="¡Gracias!"
-  description="Hemos recibido tu mensaje."
+  title="Thank you!"
+  description="We've received your message."
   noindex={true}
-  altHref={url('en/thanks')}
+  lang="en"
+  altHref={url('gracias')}
 >
   <div class="max-w-xl mx-auto px-4 sm:px-6 py-24 text-center">
     <div class="grid place-items-center w-20 h-20 mx-auto rounded-full bg-brand-400/20 text-brand-600 mb-6">
       <Icon name="lucide:check-circle-2" class="w-10 h-10" />
     </div>
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-[var(--text)] mb-4">¡Mensaje recibido!</h1>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[var(--text)] mb-4">Message received!</h1>
     <p class="text-lg text-[var(--text-soft)] mb-8">
-      Gracias por escribirnos. Te responderemos lo antes posible al email que nos
-      has dejado.
+      Thanks for writing. We'll reply as soon as possible to the email you gave
+      us.
     </p>
     <div class="flex flex-col sm:flex-row gap-3 justify-center">
       <a
-        href={url()}
+        href={url('en')}
         class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-400 text-[var(--on-accent)] font-bold transition hover:bg-brand-300"
       >
         <Icon name="lucide:home" class="w-5 h-5" />
-        Volver al inicio
+        Back to home
       </a>
       <a
-        href={url('espacios')}
+        href={url('en/spaces')}
         class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[var(--card-border)] bg-[var(--card)] text-[var(--text)] font-bold transition hover:border-brand-400"
       >
-        Seguir viendo espacios
+        Keep browsing spaces
       </a>
     </div>
   </div>

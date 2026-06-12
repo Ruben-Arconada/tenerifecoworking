@@ -1,12 +1,21 @@
 ---
 import { Icon } from 'astro-icon/components';
+import type { Lang } from '../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'es' } = Astro.props;
+const label =
+  lang === 'en' ? 'Switch between light and dark mode' : 'Cambiar entre modo claro y oscuro';
 ---
 
 <button
   type="button"
   id="theme-toggle"
   class="grid place-items-center w-10 h-10 rounded-full border border-[var(--card-border)] bg-[var(--card)] text-[var(--text)] cursor-pointer transition hover:border-brand-400 hover:scale-105 active:scale-95"
-  aria-label="Cambiar entre modo claro y oscuro"
+  aria-label={label}
 >
   <Icon name="lucide:sun" class="w-5 h-5 icon-sun" />
   <Icon name="lucide:moon" class="w-5 h-5 icon-moon" />

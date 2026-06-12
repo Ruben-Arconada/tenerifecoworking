@@ -2,15 +2,57 @@
 import { Icon } from 'astro-icon/components';
 import ThemeToggle from './ThemeToggle.astro';
 import { url, asset } from '../lib/url';
+import { langUrl, type Lang } from '../lib/i18n';
 
-const nav = [
-  { label: 'Espacios', href: url('espacios') },
-  { label: 'Publica tu espacio', href: url('publica-tu-espacio') },
-  { label: 'Contacto', href: url('contacto') },
-];
+interface Props {
+  lang?: Lang;
+  /** URL (con base) de la versión de esta página en el otro idioma. */
+  altHref?: string;
+}
+
+const { lang = 'es', altHref } = Astro.props;
+
+const NAV: Record<Lang, { label: string; path: string }[]> = {
+  es: [
+    { label: 'Espacios', path: 'espacios' },
+    { label: 'Publica tu espacio', path: 'publica-tu-espacio' },
+    { label: 'Contacto', path: 'contacto' },
+  ],
+  en: [
+    { label: 'Spaces', path: 'en/spaces' },
+    { label: 'List your space', path: 'en/list-your-space' },
+    { label: 'Contact', path: 'en/contact' },
+  ],
+};
+
+const T = {
+  es: {
+    cta: 'Ver espacios',
+    ctaPath: 'espacios',
+    menu: 'Abrir menú',
+    navLabel: 'Principal',
+    switch: 'EN',
+    switchTitle: 'Switch to English',
+  },
+  en: {
+    cta: 'View spaces',
+    ctaPath: 'en/spaces',
+    menu: 'Open menu',
+    navLabel: 'Main',
+    switch: 'ES',
+    switchTitle: 'Cambiar a español',
+  },
+}[lang];
+
+const nav = NAV[lang].map((i) => ({ label: i.label, href: url(i.path), path: i.path }));
+const homeHref = langUrl(lang);
+const otherLang: Lang = lang === 'es' ? 'en' : 'es';
+const switchHref = altHref ?? langUrl(otherLang);
 
 const current = Astro.url.pathname;
-const isActive = (href: string) => current === href;
+// Activo si el último segmento de la ruta del item aparece en el path actual
+// (robusto frente al base path de staging).
+const isActive = (path: string) => current.includes(`/${path.split('/').pop()}/`);
 ---
 
 <header
@@ -19,7 +61,7 @@ const isActive = (href: string) => current === href;
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
-      <a href={url()} class="flex items-center gap-2.5 shrink-0" aria-label="Tenerife Coworking — inicio">
+      <a href={homeHref} class="flex items-center gap-2.5 shrink-0" aria-label="Tenerife Coworking — inicio">
         <img src={asset('logo.png')} alt="" width="36" height="36" class="rounded-lg" />
         <span class="font-display font-extrabold text-[var(--text)] leading-none">
           Tenerife<span class="text-brand-500">Coworking</span>
@@ -27,14 +69,15 @@ const isActive = (href: string) => current === href;
       </a>
 
       <!-- Nav desktop -->
-      <nav class="hidden md:flex items-center gap-1" aria-label="Principal">
+      <nav class="hidden md:flex items-center gap-1" aria-label={T.navLabel}>
         {
           nav.map((item) => (
             <a
               href={item.href}
+              aria-current={isActive(item.path) ? 'page' : undefined}
               class:list={[
                 'px-3 py-2 rounded-lg text-sm font-medium transition hover:bg-[var(--surface-2)]',
-                isActive(item.href) ? 'text-brand-600' : 'text-[var(--text-soft)]',
+                isActive(item.path) ? 'text-[var(--accent-strong)]' : 'text-[var(--text-soft)]',
               ]}
             >
               {item.label}
@@ -45,19 +88,26 @@ const isActive = (href: string) => current === href;
 
       <!-- Acciones -->
       <div class="flex items-center gap-2">
-        <ThemeToggle />
         <a
-          href={url('espacios')}
+          href={switchHref}
+          title={T.switchTitle}
+          class="grid place-items-center h-10 px-2.5 rounded-full border border-[var(--card-border)] bg-[var(--card)] text-xs font-bold text-[var(--text)] transition hover:border-brand-400"
+        >
+          {T.switch}
+        </a>
+        <ThemeToggle lang={lang} />
+        <a
+          href={url(T.ctaPath)}
           class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-400 text-[var(--on-accent)] text-sm font-bold transition hover:bg-brand-300"
         >
-          Ver espacios
+          {T.cta}
         </a>
         <!-- Botón menú móvil -->
         <button
           type="button"
           id="menu-toggle"
           class="md:hidden grid place-items-center w-10 h-10 rounded-full border border-[var(--card-border)] text-[var(--text)]"
-          aria-label="Abrir menú"
+          aria-label={T.menu}
           aria-expanded="false"
         >
           <Icon name="lucide:menu" class="w-5 h-5" />
@@ -66,11 +116,7 @@ const isActive = (href: string) => current === href;
     </div>
 
     <!-- Nav móvil -->
-    <nav
-      id="mobile-nav"
-      class="md:hidden hidden pb-4 flex-col gap-1"
-      aria-label="Principal móvil"
-    >
+    <nav id="mobile-nav" class="md:hidden hidden pb-4 flex-col gap-1" aria-label={T.navLabel}>
       {
         nav.map((item) => (
           <a

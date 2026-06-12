@@ -1,5 +1,6 @@
 ---
 import { url } from '../lib/url';
+import type { Lang } from '../lib/i18n';
 
 interface Props {
   /** 'inquilino' = busca espacio · 'propietario' = quiere publicar el suyo */
@@ -8,25 +9,69 @@ interface Props {
   espacio?: string;
   /** Texto del botón de envío. */
   cta?: string;
+  lang?: Lang;
 }
 
-const { tipo = 'inquilino', espacio, cta = 'Enviar' } = Astro.props;
+const { tipo = 'inquilino', espacio, cta, lang = 'es' } = Astro.props;
+
+const T = {
+  es: {
+    name: 'Nombre *',
+    email: 'Email *',
+    phone: 'Teléfono',
+    msgTenant: 'Mensaje *',
+    msgOwner: 'Cuéntanos sobre tu espacio *',
+    phTenant: '¿Qué espacio buscas? Zona, fechas, nº de personas...',
+    phOwner: 'Tipo de espacio, ubicación, metros, qué buscas...',
+    consent:
+      'Acepto que mis datos se usen para responder a mi consulta. No se cederán a terceros ajenos a la intermediación.',
+    sending: 'Enviando…',
+    cta: 'Enviar',
+    errNoConfig:
+      'El formulario aún no está conectado. Escríbenos a info@tenerifecoworking.es mientras tanto.',
+    errFail: 'No se pudo enviar. Inténtalo de nuevo o escríbenos a info@tenerifecoworking.es.',
+    graciasPath: 'gracias',
+  },
+  en: {
+    name: 'Name *',
+    email: 'Email *',
+    phone: 'Phone',
+    msgTenant: 'Message *',
+    msgOwner: 'Tell us about your space *',
+    phTenant: 'What are you looking for? Area, dates, team size...',
+    phOwner: 'Type of space, location, size, what you need...',
+    consent:
+      'I agree to my data being used to answer my enquiry. It will not be shared with third parties outside the brokerage.',
+    sending: 'Sending…',
+    cta: 'Send',
+    errNoConfig:
+      'The form is not connected yet. Please email us at info@tenerifecoworking.es in the meantime.',
+    errFail: 'Could not send. Try again or email us at info@tenerifecoworking.es.',
+    graciasPath: 'en/thanks',
+  },
+}[lang];
 
 const webhook = import.meta.env.PUBLIC_N8N_WEBHOOK_URL ?? '';
 const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
-const graciasUrl = url('gracias');
+const graciasUrl = url(T.graciasPath);
+const ctaLabel = cta ?? T.cta;
+const msgLabel = tipo === 'propietario' ? T.msgOwner : T.msgTenant;
+const msgPlaceholder = tipo === 'propietario' ? T.phOwner : T.phTenant;
 ---
 
 <form
   class="lead-form flex flex-col gap-4"
   data-webhook={webhook}
   data-gracias={graciasUrl}
+  data-msg-noconfig={T.errNoConfig}
+  data-msg-fail={T.errFail}
   novalidate
 >
   <!-- Metadatos del lead (ocultos). _proyecto identifica el origen para que
        el workflow de n8n (compartido con otros proyectos) enrute sin ambigüedad. -->
   <input type="hidden" name="_proyecto" value="tenerifecoworking" />
   <input type="hidden" name="_tipo" value={tipo} />
+  <input type="hidden" name="_idioma" value={lang} />
   {espacio && <input type="hidden" name="_espacio" value={espacio} />}
   <input type="hidden" name="_origen" value="web tenerifecoworking.es" />
 
@@ -37,9 +82,9 @@ const graciasUrl = url('gracias');
 
   <div class="grid sm:grid-cols-2 gap-4">
     <div class="flex flex-col gap-1.5">
-      <label for="lf-nombre" class="text-sm font-medium text-[var(--text-soft)]">Nombre *</label>
+      <label for={`lf-nombre-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{T.name}</label>
       <input
-        id="lf-nombre"
+        id={`lf-nombre-${tipo}`}
         name="nombre"
         type="text"
         required
@@ -48,9 +93,9 @@ const graciasUrl = url('gracias');
       />
     </div>
     <div class="flex flex-col gap-1.5">
-      <label for="lf-email" class="text-sm font-medium text-[var(--text-soft)]">Email *</label>
+      <label for={`lf-email-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{T.email}</label>
       <input
-        id="lf-email"
+        id={`lf-email-${tipo}`}
         name="email"
         type="email"
         required
@@ -61,9 +106,9 @@ const graciasUrl = url('gracias');
   </div>
 
   <div class="flex flex-col gap-1.5">
-    <label for="lf-tel" class="text-sm font-medium text-[var(--text-soft)]">Teléfono</label>
+    <label for={`lf-tel-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{T.phone}</label>
     <input
-      id="lf-tel"
+      id={`lf-tel-${tipo}`}
       name="telefono"
       type="tel"
       autocomplete="tel"
@@ -72,19 +117,13 @@ const graciasUrl = url('gracias');
   </div>
 
   <div class="flex flex-col gap-1.5">
-    <label for="lf-msg" class="text-sm font-medium text-[var(--text-soft)]">
-      {tipo === 'propietario' ? 'Cuéntanos sobre tu espacio *' : 'Mensaje *'}
-    </label>
+    <label for={`lf-msg-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{msgLabel}</label>
     <textarea
-      id="lf-msg"
+      id={`lf-msg-${tipo}`}
       name="mensaje"
       rows="4"
       required
-      placeholder={
-        tipo === 'propietario'
-          ? 'Tipo de espacio, ubicación, metros, qué buscas...'
-          : '¿Qué espacio buscas? Zona, fechas, nº de personas...'
-      }
+      placeholder={msgPlaceholder}
       class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition resize-y"
     ></textarea>
   </div>
@@ -92,10 +131,7 @@ const graciasUrl = url('gracias');
   <!-- Consentimiento RGPD -->
   <label class="flex items-start gap-2.5 text-xs text-[var(--text-muted)]">
     <input type="checkbox" name="consentimiento" required class="mt-0.5 accent-brand-400" />
-    <span>
-      Acepto que mis datos se usen para responder a mi consulta. No se cederán a
-      terceros ajenos a la intermediación.
-    </span>
+    <span>{T.consent}</span>
   </label>
 
   {
@@ -108,8 +144,8 @@ const graciasUrl = url('gracias');
     type="submit"
     class="lf-submit inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-400 text-[var(--on-accent)] font-bold transition hover:bg-brand-300 disabled:opacity-60 disabled:cursor-not-allowed"
   >
-    <span class="lf-label">{cta}</span>
-    <span class="lf-spinner hidden">Enviando…</span>
+    <span class="lf-label">{ctaLabel}</span>
+    <span class="lf-spinner hidden">{T.sending}</span>
   </button>
 
   <!-- Mensajes de estado -->
@@ -161,9 +197,7 @@ const graciasUrl = url('gracias');
 
       // Sin webhook configurado todavía: fallback a email.
       if (!webhook) {
-        showError(
-          'El formulario aún no está conectado. Escríbenos a info@tenerifecoworking.es mientras tanto.',
-        );
+        showError(form.dataset.msgNoconfig ?? 'info@tenerifecoworking.es');
         return;
       }
 
@@ -179,9 +213,7 @@ const graciasUrl = url('gracias');
         window.location.href = gracias;
       } catch (err) {
         setSending(false);
-        showError(
-          'No se pudo enviar. Inténtalo de nuevo o escríbenos a info@tenerifecoworking.es.',
-        );
+        showError(form.dataset.msgFail ?? 'info@tenerifecoworking.es');
       }
     });
   });
