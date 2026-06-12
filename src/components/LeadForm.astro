@@ -23,7 +23,9 @@ const graciasUrl = url('gracias');
   data-gracias={graciasUrl}
   novalidate
 >
-  <!-- Metadatos del lead (ocultos) -->
+  <!-- Metadatos del lead (ocultos). _proyecto identifica el origen para que
+       el workflow de n8n (compartido con otros proyectos) enrute sin ambigüedad. -->
+  <input type="hidden" name="_proyecto" value="tenerifecoworking" />
   <input type="hidden" name="_tipo" value={tipo} />
   {espacio && <input type="hidden" name="_espacio" value={espacio} />}
   <input type="hidden" name="_origen" value="web tenerifecoworking.es" />
