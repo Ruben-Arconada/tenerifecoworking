@@ -24,6 +24,13 @@ export function initCatalog(): void {
       if (ok) visible++;
     });
     if (count) count.textContent = String(visible);
+    // Concordancia singular/plural (data-singular/data-plural en #count-noun).
+    const noun = document.getElementById('count-noun');
+    if (noun) {
+      const s = noun.dataset.singular ?? '';
+      const p = noun.dataset.plural ?? '';
+      noun.textContent = visible === 1 ? s : p;
+    }
     empty?.classList.toggle('hidden', visible > 0);
     grid?.classList.toggle('hidden', visible === 0);
   }

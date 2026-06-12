@@ -49,10 +49,11 @@
   --card-border: rgba(0, 0, 0, 0.08);
   --text: #1a1611;           /* texto principal */
   --text-soft: #423b30;      /* texto secundario */
-  --text-muted: #7d7361;     /* texto terciario */
+  --text-muted: #756b59;     /* texto terciario (AA 4.5:1 también sobre --surface-2) */
   --accent: #fbbf2d;
-  /* Tono más oscuro en claro: contraste AA sobre fondos claros (precios, enlaces). */
-  --accent-strong: #b06a0c;
+  /* Tono oscuro en claro: AA 4.5:1 también para texto pequeño sobre
+     --surface (5.1:1), --surface-2 (4.9:1) y --card (5.2:1). */
+  --accent-strong: #9c5e0b;
   --on-accent: #1a1611;      /* texto sobre amarillo */
 }
 
@@ -93,6 +94,13 @@ h1, h2, h3, h4, h5, h6 {
 ::selection {
   background: var(--accent);
   color: var(--on-accent);
+}
+
+/* Indicador de foco visible y con contraste >=3:1 en ambos temas.
+   (Los inputs ya no llevan outline-none; esto unifica el foco de teclado.) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
 }
 
 /* Respeta reduce-motion */

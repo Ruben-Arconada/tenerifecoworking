@@ -30,7 +30,7 @@ const ventajas = [
 
 <Base
   title="List your space"
-  description="List your office, retail space or meeting room on Tenerife Coworking. No fees: we only charge a commission when we get it rented."
+  description="List your office, retail space or meeting room on Tenerife Coworking. No upfront fees: we only charge a commission when we get it rented."
   lang="en"
   altHref={url('publica-tu-espacio')}
 >
@@ -39,12 +39,12 @@ const ventajas = [
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
       <div class="max-w-2xl">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-[var(--text)] mb-5">
-          Got an unused space? <span class="text-brand-500">Let's make it earn.</span>
+          Got an unused space? <span class="text-[var(--accent-strong)]">Let's make it pay.</span>
         </h1>
         <p class="text-lg text-[var(--text-soft)]">
           List your office, retail space, warehouse or meeting room on Tenerife
-          Coworking. No fees, no lock-in: we only charge a commission when we
-          get it rented.
+          Coworking. No monthly fees, no lock-in: we only charge a commission
+          when we get it rented.
         </p>
       </div>
     </div>
@@ -52,12 +52,13 @@ const ventajas = [
 
   <!-- Benefits -->
   <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <h2 class="sr-only">Why list with us</h2>
     <div class="grid sm:grid-cols-2 gap-6">
       {
         ventajas.map((v) => (
           <div class="flex gap-4 p-6 rounded-2xl border border-[var(--card-border)] bg-[var(--card)]">
-            <div class="grid place-items-center w-12 h-12 shrink-0 rounded-xl bg-brand-400/20 text-brand-600">
-              <Icon name={v.icon} class="w-6 h-6" />
+            <div class="grid place-items-center w-12 h-12 shrink-0 rounded-xl bg-brand-400/20 text-brand-700">
+              <Icon aria-hidden="true" name={v.icon} class="w-6 h-6" />
             </div>
             <div>
               <h3 class="font-bold text-[var(--text)] mb-1.5">{v.title}</h3>

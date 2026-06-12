@@ -31,10 +31,10 @@ const datos = [
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-1.5 text-sm text-[var(--text-muted)] mb-6" aria-label="Migas">
-      <a href={url()} class="hover:text-brand-500 transition">Inicio</a>
-      <Icon name="lucide:chevron-right" class="w-4 h-4" />
-      <a href={url('espacios')} class="hover:text-brand-500 transition">Espacios</a>
-      <Icon name="lucide:chevron-right" class="w-4 h-4" />
+      <a href={url()} class="hover:text-[var(--accent-strong)] transition">Inicio</a>
+      <Icon aria-hidden="true" name="lucide:chevron-right" class="w-4 h-4" />
+      <a href={url('espacios')} class="hover:text-[var(--accent-strong)] transition">Espacios</a>
+      <Icon aria-hidden="true" name="lucide:chevron-right" class="w-4 h-4" />
       <span class="text-[var(--text-soft)] truncate">{d.title}</span>
     </nav>
 
@@ -52,7 +52,7 @@ const datos = [
               />
             ) : (
               <div class="w-full h-full grid place-items-center bg-gradient-to-br from-brand-200 to-brand-400">
-                <Icon name="lucide:image" class="w-16 h-16 text-brand-800/30" />
+                <Icon aria-hidden="true" name="lucide:image" class="w-16 h-16 text-brand-800/30" />
               </div>
             )
           }
@@ -71,7 +71,7 @@ const datos = [
         }
 
         <div class="flex items-center gap-2 mb-3">
-          <span class="px-2.5 py-1 rounded-full bg-brand-400/20 text-brand-700 text-xs font-semibold">
+          <span class="px-2.5 py-1 rounded-full bg-brand-400/20 text-brand-800 text-xs font-semibold">
             {TIPO_LABEL[d.tipo]}
           </span>
           {
@@ -85,7 +85,7 @@ const datos = [
 
         <h1 class="text-3xl sm:text-4xl font-extrabold text-[var(--text)] mb-2">{d.title}</h1>
         <p class="flex items-center gap-1.5 text-[var(--text-muted)] mb-6">
-          <Icon name="lucide:map-pin" class="w-4 h-4" />
+          <Icon aria-hidden="true" name="lucide:map-pin" class="w-4 h-4" />
           {d.municipio}{d.zona ? `, ${d.zona}` : ''} · {d.isla}
         </p>
 
@@ -95,7 +95,7 @@ const datos = [
             <div class="flex flex-wrap gap-2 mb-8">
               {d.caracteristicas.map((c) => (
                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--surface-2)] border border-[var(--card-border)] text-sm text-[var(--text-soft)]">
-                  <Icon name="lucide:check" class="w-4 h-4 text-brand-500" />
+                  <Icon aria-hidden="true" name="lucide:check" class="w-4 h-4 text-brand-500" />
                   {c}
                 </span>
               ))}
@@ -114,14 +114,14 @@ const datos = [
         <div class="lg:sticky lg:top-24 flex flex-col gap-6">
           <!-- Precio + datos -->
           <div class="rounded-2xl border border-[var(--card-border)] bg-[var(--card)] p-6">
-            <p class="text-2xl font-extrabold text-brand-600 mb-4">
+            <p class="text-2xl font-extrabold text-[var(--accent-strong)] mb-4">
               {formatPrecio(d.precio, d.precioPeriodo, d.precioDesde)}
             </p>
             <dl class="space-y-3">
               {
                 datos.map((item) => (
                   <div class="flex items-center gap-3">
-                    <Icon name={item.icon} class="w-4 h-4 text-[var(--text-muted)] shrink-0" />
+                    <Icon aria-hidden="true" name={item.icon} class="w-4 h-4 text-[var(--text-muted)] shrink-0" />
                     <dt class="text-sm text-[var(--text-muted)]">{item.label}:</dt>
                     <dd class="text-sm font-medium text-[var(--text)] ml-auto text-right">{item.value}</dd>
                   </div>

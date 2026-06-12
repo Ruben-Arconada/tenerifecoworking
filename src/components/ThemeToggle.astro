@@ -17,8 +17,8 @@ const label =
   class="grid place-items-center w-10 h-10 rounded-full border border-[var(--card-border)] bg-[var(--card)] text-[var(--text)] cursor-pointer transition hover:border-brand-400 hover:scale-105 active:scale-95"
   aria-label={label}
 >
-  <Icon name="lucide:sun" class="w-5 h-5 icon-sun" />
-  <Icon name="lucide:moon" class="w-5 h-5 icon-moon" />
+  <Icon aria-hidden="true" name="lucide:sun" class="w-5 h-5 icon-sun" />
+  <Icon aria-hidden="true" name="lucide:moon" class="w-5 h-5 icon-moon" />
 </button>
 
 <style>
@@ -41,6 +41,9 @@ const label =
     const current = document.documentElement.getAttribute('data-theme');
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
+    document
+      .getElementById('meta-theme-color')
+      ?.setAttribute('content', next === 'dark' ? '#100d09' : '#fbbf2d');
     try {
       localStorage.setItem('theme', next);
     } catch (e) {}

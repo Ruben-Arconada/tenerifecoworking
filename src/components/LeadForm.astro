@@ -51,6 +51,10 @@ const T = {
   },
 }[lang];
 
+// Sufijo único por instancia: evita ids duplicados si dos formularios
+// del mismo tipo coinciden en una página (se genera en build, sitio estático).
+const uid = Math.random().toString(36).slice(2, 8);
+
 const webhook = import.meta.env.PUBLIC_N8N_WEBHOOK_URL ?? '';
 const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 const graciasUrl = url(T.graciasPath);
@@ -82,49 +86,49 @@ const msgPlaceholder = tipo === 'propietario' ? T.phOwner : T.phTenant;
 
   <div class="grid sm:grid-cols-2 gap-4">
     <div class="flex flex-col gap-1.5">
-      <label for={`lf-nombre-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{T.name}</label>
+      <label for={`lf-nombre-${uid}`} class="text-sm font-medium text-[var(--text-soft)]">{T.name}</label>
       <input
-        id={`lf-nombre-${tipo}`}
+        id={`lf-nombre-${uid}`}
         name="nombre"
         type="text"
         required
         autocomplete="name"
-        class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition"
+        class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] focus:border-brand-400 transition"
       />
     </div>
     <div class="flex flex-col gap-1.5">
-      <label for={`lf-email-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{T.email}</label>
+      <label for={`lf-email-${uid}`} class="text-sm font-medium text-[var(--text-soft)]">{T.email}</label>
       <input
-        id={`lf-email-${tipo}`}
+        id={`lf-email-${uid}`}
         name="email"
         type="email"
         required
         autocomplete="email"
-        class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition"
+        class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] focus:border-brand-400 transition"
       />
     </div>
   </div>
 
   <div class="flex flex-col gap-1.5">
-    <label for={`lf-tel-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{T.phone}</label>
+    <label for={`lf-tel-${uid}`} class="text-sm font-medium text-[var(--text-soft)]">{T.phone}</label>
     <input
-      id={`lf-tel-${tipo}`}
+      id={`lf-tel-${uid}`}
       name="telefono"
       type="tel"
       autocomplete="tel"
-      class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition"
+      class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] focus:border-brand-400 transition"
     />
   </div>
 
   <div class="flex flex-col gap-1.5">
-    <label for={`lf-msg-${tipo}`} class="text-sm font-medium text-[var(--text-soft)]">{msgLabel}</label>
+    <label for={`lf-msg-${uid}`} class="text-sm font-medium text-[var(--text-soft)]">{msgLabel}</label>
     <textarea
-      id={`lf-msg-${tipo}`}
+      id={`lf-msg-${uid}`}
       name="mensaje"
       rows="4"
       required
       placeholder={msgPlaceholder}
-      class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition resize-y"
+      class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] focus:border-brand-400 transition resize-y"
     ></textarea>
   </div>
 

@@ -15,7 +15,7 @@ const pasos = [
   {
     icon: 'lucide:search',
     title: 'Tell us what you need',
-    text: 'Area, type of space and team size. Or browse the catalogue directly.',
+    text: 'Area, type of space and team size. Or browse the catalog directly.',
   },
   {
     icon: 'lucide:handshake',
@@ -25,13 +25,13 @@ const pasos = [
   {
     icon: 'lucide:key-round',
     title: 'You close the deal',
-    text: 'Visit, negotiate and sign. We accompany you through the whole process.',
+    text: "Visit, negotiate and sign. We're with you every step of the way.",
   },
 ];
 ---
 
 <Base
-  title="Tenerife Coworking · Workspace rentals in the Canary Islands"
+  title="Tenerife Coworking · Canary Islands workspace rentals"
   description="Brokerage for offices, meeting rooms, retail spaces and coworking desks across all the Canary Islands. Find your space or list yours."
   lang="en"
   altHref={url('')}
@@ -45,14 +45,14 @@ const pasos = [
     <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
       <div class="max-w-3xl">
         <span
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-400/20 text-brand-700 text-sm font-semibold mb-6"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-400/20 text-brand-800 text-sm font-semibold mb-6"
         >
-          <Icon name="lucide:map-pin" class="w-4 h-4" />
+          <Icon aria-hidden="true" name="lucide:map-pin" class="w-4 h-4" />
           All the Canary Islands
         </span>
         <h1 class="text-4xl sm:text-6xl font-extrabold text-[var(--text)] leading-[1.05] mb-6">
           Your next workspace,
-          <span class="text-brand-500">one click away.</span>
+          <span class="text-[var(--accent-strong)]">one click away.</span>
         </h1>
         <p class="text-lg sm:text-xl text-[var(--text-soft)] max-w-2xl mb-8">
           Offices, meeting rooms, retail spaces and coworking desks across all
@@ -63,14 +63,14 @@ const pasos = [
             href={url('en/spaces')}
             class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-400 text-[var(--on-accent)] font-bold transition hover:bg-brand-300"
           >
-            <Icon name="lucide:search" class="w-5 h-5" />
+            <Icon aria-hidden="true" name="lucide:search" class="w-5 h-5" />
             Find a space
           </a>
           <a
             href={url('en/list-your-space')}
             class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-[var(--card-border)] bg-[var(--card)] text-[var(--text)] font-bold transition hover:border-brand-400"
           >
-            <Icon name="lucide:plus-circle" class="w-5 h-5" />
+            <Icon aria-hidden="true" name="lucide:plus-circle" class="w-5 h-5" />
             List my space
           </a>
         </div>
@@ -94,7 +94,7 @@ const pasos = [
             class="hidden sm:inline-flex items-center gap-1 text-[var(--accent-strong)] font-semibold hover:gap-2 transition-all"
           >
             View all
-            <Icon name="lucide:arrow-right" class="w-4 h-4" />
+            <Icon aria-hidden="true" name="lucide:arrow-right" class="w-4 h-4" />
           </a>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -111,15 +111,15 @@ const pasos = [
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
       <h2 class="text-3xl font-bold text-[var(--text)] text-center mb-3">How it works</h2>
       <p class="text-[var(--text-muted)] text-center max-w-xl mx-auto mb-12">
-        We're brokers: we save you the search and only charge a commission when
-        the rental closes.
+        We're brokers: we do the searching for you and only charge a commission
+        when the rental closes.
       </p>
       <div class="grid md:grid-cols-3 gap-8">
         {
           pasos.map((p, i) => (
             <div class="relative flex flex-col items-center text-center">
               <div class="grid place-items-center w-14 h-14 rounded-2xl bg-brand-400 text-[var(--on-accent)] mb-4">
-                <Icon name={p.icon} class="w-7 h-7" />
+                <Icon aria-hidden="true" name={p.icon} class="w-7 h-7" />
               </div>
               <span class="absolute -top-2 right-1/2 translate-x-12 text-5xl font-extrabold text-brand-400/15">
                 {i + 1}
@@ -144,17 +144,18 @@ const pasos = [
         </h2>
         <p class="text-ink-900/80 text-lg mb-8">
           List it for free. We only charge a commission when we get it rented.
-          No fees, no lock-in.
+          No monthly fees, no lock-in.
         </p>
         <a
           href={url('en/list-your-space')}
           class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-ink-900 text-white font-bold transition hover:bg-ink-800"
         >
-          <Icon name="lucide:plus-circle" class="w-5 h-5" />
+          <Icon aria-hidden="true" name="lucide:plus-circle" class="w-5 h-5" />
           List my space
         </a>
       </div>
       <Icon
+        aria-hidden="true"
         name="lucide:building-2"
         class="absolute -right-8 -bottom-8 w-56 h-56 text-ink-900/10"
       />

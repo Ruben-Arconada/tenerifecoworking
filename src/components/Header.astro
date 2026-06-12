@@ -109,8 +109,9 @@ const isActive = (path: string) => current.includes(`/${path.split('/').pop()}/`
           class="md:hidden grid place-items-center w-10 h-10 rounded-full border border-[var(--card-border)] text-[var(--text)]"
           aria-label={T.menu}
           aria-expanded="false"
+          aria-controls="mobile-nav"
         >
-          <Icon name="lucide:menu" class="w-5 h-5" />
+          <Icon aria-hidden="true" name="lucide:menu" class="w-5 h-5" />
         </button>
       </div>
     </div>

@@ -28,7 +28,9 @@ const robots = !isProd || noindex ? 'noindex, follow' : 'index, follow';
 // Canonical absoluto (respeta site + ruta actual).
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const altAbs = altHref ? new URL(altHref, Astro.site).href : undefined;
-const ogImage = new URL(asset(image ?? 'apple-touch-icon.png'), Astro.site).href;
+const ogImage = new URL(asset(image ?? 'og-default.png'), Astro.site).href;
+
+const skipLabel = lang === 'en' ? 'Skip to content' : 'Saltar al contenido';
 
 const fullTitle = title.includes('Tenerife Coworking')
   ? title
@@ -65,9 +67,9 @@ const fullTitle = title.includes('Tenerife Coworking')
     {altAbs && <meta property="og:locale:alternate" content={OG_LOCALE[altLang]} />}
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Tema del navegador según modo -->
-    <meta name="theme-color" content="#fbbf2d" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#100d09" media="(prefers-color-scheme: dark)" />
+    <!-- Tema del navegador: el script anti-FOUC y el toggle lo mantienen
+         sincronizado con data-theme (localStorage manda sobre el sistema). -->
+    <meta name="theme-color" id="meta-theme-color" content="#fbbf2d" />
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href={asset('favicon-32.png')} />
@@ -89,12 +91,20 @@ const fullTitle = title.includes('Tenerife Coworking')
           }
         } catch (e) {}
         document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.getElementById('meta-theme-color');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#100d09' : '#fbbf2d');
       })();
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-brand-400 focus:text-[var(--on-accent)] focus:font-bold"
+    >
+      {skipLabel}
+    </a>
     <Header lang={lang} altHref={altHref} />
-    <main class="flex-1">
+    <main id="main" class="flex-1">
       <slot />
     </main>
     <Footer lang={lang} />

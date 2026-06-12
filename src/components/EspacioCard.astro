@@ -66,7 +66,7 @@ const icon = TIPO_ICON[d.tipo] ?? 'lucide:map-pin';
         />
       ) : (
         <div class="w-full h-full grid place-items-center bg-gradient-to-br from-brand-200 to-brand-400">
-          <Icon name={icon} class="w-14 h-14 text-brand-800/40" />
+          <Icon aria-hidden="true" name={icon} class="w-14 h-14 text-brand-800/40" />
         </div>
       )
     }
@@ -87,7 +87,7 @@ const icon = TIPO_ICON[d.tipo] ?? 'lucide:map-pin';
   <!-- Cuerpo -->
   <div class="flex flex-col flex-1 p-4">
     <div class="flex items-center gap-1 text-xs text-[var(--text-muted)] mb-1.5">
-      <Icon name="lucide:map-pin" class="w-3.5 h-3.5" />
+      <Icon aria-hidden="true" name="lucide:map-pin" class="w-3.5 h-3.5" />
       <span>{d.municipio}{d.zona ? `, ${d.zona}` : ''} · {d.isla}</span>
     </div>
 
@@ -103,22 +103,23 @@ const icon = TIPO_ICON[d.tipo] ?? 'lucide:map-pin';
         {
           d.capacidad && (
             <span class="flex items-center gap-1">
-              <Icon name="lucide:users" class="w-3.5 h-3.5" />
+              <Icon aria-hidden="true" name="lucide:users" class="w-3.5 h-3.5" />
               {d.capacidad}
+              <span class="sr-only">{lang === 'en' ? 'people' : 'personas'}</span>
             </span>
           )
         }
         {
           d.superficie && (
             <span class="flex items-center gap-1">
-              <Icon name="lucide:ruler" class="w-3.5 h-3.5" />
+              <Icon aria-hidden="true" name="lucide:ruler" class="w-3.5 h-3.5" />
               {d.superficie} m²
             </span>
           )
         }
       </div>
       <span class="text-sm font-bold text-[var(--accent-strong)]">
-        {formatPrecio(d.precio, d.precioPeriodo, d.precioDesde)}
+        {formatPrecio(d.precio, d.precioPeriodo, d.precioDesde, lang)}
       </span>
     </div>
   </div>
