@@ -1,0 +1,39 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class="grid place-items-center w-10 h-10 rounded-full border border-[var(--card-border)] bg-[var(--card)] text-[var(--text)] cursor-pointer transition hover:border-brand-400 hover:scale-105 active:scale-95"
+  aria-label="Cambiar entre modo claro y oscuro"
+>
+  <Icon name="lucide:sun" class="w-5 h-5 icon-sun" />
+  <Icon name="lucide:moon" class="w-5 h-5 icon-moon" />
+</button>
+
+<style>
+  /* El JS del Base layout garantiza data-theme siempre seteado. */
+  .icon-sun,
+  .icon-moon {
+    display: none;
+  }
+  :global([data-theme='light']) .icon-sun {
+    display: block;
+  }
+  :global([data-theme='dark']) .icon-moon {
+    display: block;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch (e) {}
+  });
+</script>

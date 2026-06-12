@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import LeadForm from '../components/LeadForm.astro';
+---
+
+<Base
+  title="Contacto"
+  description="Ponte en contacto con Tenerife Coworking. Te ayudamos a encontrar tu espacio de trabajo en cualquier isla de Canarias."
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Info -->
+      <div>
+        <h1 class="text-4xl font-extrabold text-[var(--text)] mb-4">Hablemos</h1>
+        <p class="text-lg text-[var(--text-soft)] mb-8">
+          ¿Buscas un espacio, quieres publicar el tuyo o tienes cualquier duda?
+          Escríbenos y te respondemos lo antes posible.
+        </p>
+
+        <div class="space-y-4">
+          <a
+            href="mailto:info@tenerifecoworking.es"
+            class="flex items-center gap-4 p-4 rounded-2xl border border-[var(--card-border)] bg-[var(--card)] hover:border-brand-400 transition"
+          >
+            <div class="grid place-items-center w-11 h-11 rounded-xl bg-brand-400/20 text-brand-600">
+              <Icon name="lucide:mail" class="w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-xs text-[var(--text-muted)]">Email</p>
+              <p class="font-semibold text-[var(--text)]">info@tenerifecoworking.es</p>
+            </div>
+          </a>
+
+          <div class="flex items-center gap-4 p-4 rounded-2xl border border-[var(--card-border)] bg-[var(--card)]">
+            <div class="grid place-items-center w-11 h-11 rounded-xl bg-brand-400/20 text-brand-600">
+              <Icon name="lucide:map-pin" class="w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-xs text-[var(--text-muted)]">Zona de servicio</p>
+              <p class="font-semibold text-[var(--text)]">Todas las islas Canarias</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="rounded-3xl border border-[var(--card-border)] bg-[var(--card)] p-6 sm:p-8">
+        <LeadForm tipo="inquilino" cta="Enviar mensaje" />
+      </div>
+    </div>
+  </div>
+</Base>

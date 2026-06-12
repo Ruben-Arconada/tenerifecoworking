@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { asset } from '../lib/url';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Imagen para Open Graph (ruta en /public). Por defecto el logo. */
+  image?: string;
+  /** Forzar noindex aunque estemos en producción (p. ej. /gracias/). */
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex = false } = Astro.props;
+
+// En cualquier entorno que no sea producción, noindex global.
+const isProd = import.meta.env.TNF_IS_PROD;
+const robots = !isProd || noindex ? 'noindex, follow' : 'index, follow';
+
+// Canonical absoluto (respeta site + ruta actual).
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(asset(image ?? 'apple-touch-icon.png'), Astro.site).href;
+
+const fullTitle = title.includes('Tenerife Coworking')
+  ? title
+  : `${title} · Tenerife Coworking`;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content={robots} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tema del navegador según modo -->
+    <meta name="theme-color" content="#fbbf2d" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#100d09" media="(prefers-color-scheme: dark)" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href={asset('favicon-32.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={asset('apple-touch-icon.png')} />
+
+    <!-- Anti-FOUC: setea data-theme antes de pintar. Siempre 'light' o 'dark'. -->
+    <script is:inline>
+      (function () {
+        var theme = 'light';
+        try {
+          var stored = localStorage.getItem('theme');
+          if (stored === 'dark' || stored === 'light') {
+            theme = stored;
+          } else if (
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+          ) {
+            theme = 'dark';
+          }
+        } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

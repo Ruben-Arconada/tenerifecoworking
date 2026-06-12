@@ -1,0 +1,80 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const ventajas = [
+  {
+    icon: 'lucide:badge-euro',
+    title: 'Solo pagas si alquilamos',
+    text: 'Sin cuotas mensuales ni permanencia. Cobramos una comisión únicamente cuando se cierra el alquiler.',
+  },
+  {
+    icon: 'lucide:megaphone',
+    title: 'Damos visibilidad a tu espacio',
+    text: 'Lo publicamos en la web y lo movemos entre quienes buscan espacio en tu isla.',
+  },
+  {
+    icon: 'lucide:shield-check',
+    title: 'Filtramos los contactos',
+    text: 'Te pasamos solo interesados reales, ya cribados. Tú decides con quién hablas.',
+  },
+  {
+    icon: 'lucide:clock',
+    title: 'Te ahorramos tiempo',
+    text: 'Nos ocupamos de la difusión y la primera toma de contacto. Tú solo recibes a quien encaja.',
+  },
+];
+---
+
+<Base
+  title="Publica tu espacio"
+  description="Publica tu oficina, local o sala en Tenerife Coworking. Sin cuotas: solo cobramos comisión cuando conseguimos alquilarlo."
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-brand-100 to-[var(--surface)] border-b border-[var(--card-border)]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-[var(--text)] mb-5">
+          ¿Tienes un espacio sin uso? <span class="text-brand-500">Hagámoslo rentable.</span>
+        </h1>
+        <p class="text-lg text-[var(--text-soft)]">
+          Publica tu oficina, local, nave o sala en Tenerife Coworking. Sin
+          cuotas ni permanencia: solo cobramos una comisión cuando conseguimos
+          alquilarlo.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ventajas -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="grid sm:grid-cols-2 gap-6">
+      {
+        ventajas.map((v) => (
+          <div class="flex gap-4 p-6 rounded-2xl border border-[var(--card-border)] bg-[var(--card)]">
+            <div class="grid place-items-center w-12 h-12 shrink-0 rounded-xl bg-brand-400/20 text-brand-600">
+              <Icon name={v.icon} class="w-6 h-6" />
+            </div>
+            <div>
+              <h3 class="font-bold text-[var(--text)] mb-1.5">{v.title}</h3>
+              <p class="text-sm text-[var(--text-muted)]">{v.text}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Formulario -->
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 pb-20">
+    <div class="rounded-3xl border border-[var(--card-border)] bg-[var(--card)] p-6 sm:p-10">
+      <h2 class="text-2xl font-bold text-[var(--text)] mb-2">Cuéntanos sobre tu espacio</h2>
+      <p class="text-[var(--text-muted)] mb-8">
+        Rellena el formulario y te contactamos para conocer los detalles y
+        publicarlo. Es gratis.
+      </p>
+      <LeadForm tipo="propietario" cta="Publicar mi espacio" />
+    </div>
+  </section>
+</Base>

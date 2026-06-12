@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Dark mode controlado por atributo data-theme en <html>.
+   El script anti-FOUC del Base layout lo setea antes de pintar. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  /* === Marca Tenerife Coworking — amarillo del logo (#fbbf2d) === */
+  --color-brand-50:  #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-200: #fde68a;
+  --color-brand-300: #fcd34d;
+  --color-brand-400: #fbbf2d;  /* amarillo exacto del logo (acento principal) */
+  --color-brand-500: #f0a915;
+  --color-brand-600: #d4880a;
+  --color-brand-700: #b06a0c;
+  --color-brand-800: #8f5310;
+  --color-brand-900: #76430f;
+  --color-brand-950: #44230a;
+
+  /* === Neutrales cálidos (combinan con el amarillo, no gris frío) === */
+  --color-ink-50:  #faf9f7;
+  --color-ink-100: #f2efe9;
+  --color-ink-200: #e6e1d7;
+  --color-ink-300: #d2cabb;
+  --color-ink-400: #a99e8b;
+  --color-ink-500: #7d7361;
+  --color-ink-600: #5c5345;
+  --color-ink-700: #423b30;
+  --color-ink-800: #2a251d;
+  --color-ink-900: #1a1611;
+  --color-ink-950: #100d09;
+
+  /* === Tipografía (system stack premium; sin dependencia de Google Fonts) === */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-sans);
+
+  /* === Misc === */
+  --container-narrow: 65ch;
+}
+
+/* Tokens semánticos que cambian con el tema. Los usamos vía
+   bg-[var(--surface)] etc. para no repetir light/dark en cada clase. */
+:root {
+  --surface: #fffdf7;        /* fondo de página */
+  --surface-2: #fff8e9;      /* fondo alterno / secciones */
+  --card: #ffffff;           /* tarjetas */
+  --card-border: rgba(0, 0, 0, 0.08);
+  --text: #1a1611;           /* texto principal */
+  --text-soft: #423b30;      /* texto secundario */
+  --text-muted: #7d7361;     /* texto terciario */
+  --accent: #fbbf2d;
+  --accent-strong: #d4880a;
+  --on-accent: #1a1611;      /* texto sobre amarillo */
+}
+
+[data-theme="dark"] {
+  --surface: #100d09;
+  --surface-2: #1a1611;
+  --card: #1f1a13;
+  --card-border: rgba(255, 255, 255, 0.09);
+  --text: #f7f3ea;
+  --text-soft: #d2cabb;
+  --text-muted: #a99e8b;
+  --accent: #fbbf2d;
+  --accent-strong: #fcd34d;
+  --on-accent: #1a1611;
+}
+
+/* Suavizado tipográfico */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--surface);
+  color: var(--text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Respeta reduce-motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

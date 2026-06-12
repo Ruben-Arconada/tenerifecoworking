@@ -1,0 +1,186 @@
+---
+import { url } from '../lib/url';
+
+interface Props {
+  /** 'inquilino' = busca espacio · 'propietario' = quiere publicar el suyo */
+  tipo?: 'inquilino' | 'propietario';
+  /** Si el form va en una ficha, el espacio de interés (contexto del lead). */
+  espacio?: string;
+  /** Texto del botón de envío. */
+  cta?: string;
+}
+
+const { tipo = 'inquilino', espacio, cta = 'Enviar' } = Astro.props;
+
+const webhook = import.meta.env.PUBLIC_N8N_WEBHOOK_URL ?? '';
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const graciasUrl = url('gracias');
+---
+
+<form
+  class="lead-form flex flex-col gap-4"
+  data-webhook={webhook}
+  data-gracias={graciasUrl}
+  novalidate
+>
+  <!-- Metadatos del lead (ocultos) -->
+  <input type="hidden" name="_tipo" value={tipo} />
+  {espacio && <input type="hidden" name="_espacio" value={espacio} />}
+  <input type="hidden" name="_origen" value="web tenerifecoworking.es" />
+
+  <!-- Honeypot anti-spam: invisible para humanos, los bots lo rellenan. -->
+  <div class="hidden" aria-hidden="true">
+    <label>No rellenar este campo<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <div class="grid sm:grid-cols-2 gap-4">
+    <div class="flex flex-col gap-1.5">
+      <label for="lf-nombre" class="text-sm font-medium text-[var(--text-soft)]">Nombre *</label>
+      <input
+        id="lf-nombre"
+        name="nombre"
+        type="text"
+        required
+        autocomplete="name"
+        class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition"
+      />
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="lf-email" class="text-sm font-medium text-[var(--text-soft)]">Email *</label>
+      <input
+        id="lf-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition"
+      />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for="lf-tel" class="text-sm font-medium text-[var(--text-soft)]">Teléfono</label>
+    <input
+      id="lf-tel"
+      name="telefono"
+      type="tel"
+      autocomplete="tel"
+      class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for="lf-msg" class="text-sm font-medium text-[var(--text-soft)]">
+      {tipo === 'propietario' ? 'Cuéntanos sobre tu espacio *' : 'Mensaje *'}
+    </label>
+    <textarea
+      id="lf-msg"
+      name="mensaje"
+      rows="4"
+      required
+      placeholder={
+        tipo === 'propietario'
+          ? 'Tipo de espacio, ubicación, metros, qué buscas...'
+          : '¿Qué espacio buscas? Zona, fechas, nº de personas...'
+      }
+      class="px-3.5 py-2.5 rounded-lg border border-[var(--card-border)] bg-[var(--surface)] text-[var(--text)] outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 transition resize-y"
+    ></textarea>
+  </div>
+
+  <!-- Consentimiento RGPD -->
+  <label class="flex items-start gap-2.5 text-xs text-[var(--text-muted)]">
+    <input type="checkbox" name="consentimiento" required class="mt-0.5 accent-brand-400" />
+    <span>
+      Acepto que mis datos se usen para responder a mi consulta. No se cederán a
+      terceros ajenos a la intermediación.
+    </span>
+  </label>
+
+  {
+    turnstileKey && (
+      <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="auto" />
+    )
+  }
+
+  <button
+    type="submit"
+    class="lf-submit inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-400 text-[var(--on-accent)] font-bold transition hover:bg-brand-300 disabled:opacity-60 disabled:cursor-not-allowed"
+  >
+    <span class="lf-label">{cta}</span>
+    <span class="lf-spinner hidden">Enviando…</span>
+  </button>
+
+  <!-- Mensajes de estado -->
+  <p class="lf-error hidden text-sm text-red-600 dark:text-red-400" role="alert"></p>
+</form>
+
+{
+  turnstileKey && (
+    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.lead-form').forEach((form) => {
+    const webhook = form.dataset.webhook ?? '';
+    const gracias = form.dataset.gracias ?? '/gracias/';
+    const submit = form.querySelector<HTMLButtonElement>('.lf-submit');
+    const label = form.querySelector('.lf-label');
+    const spinner = form.querySelector('.lf-spinner');
+    const errorBox = form.querySelector<HTMLElement>('.lf-error');
+
+    function setSending(on: boolean) {
+      if (submit) submit.disabled = on;
+      label?.classList.toggle('hidden', on);
+      spinner?.classList.toggle('hidden', !on);
+    }
+    function showError(msg: string) {
+      if (errorBox) {
+        errorBox.textContent = msg;
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox?.classList.add('hidden');
+
+      // Honeypot: si está relleno, es un bot. Fingimos éxito y no enviamos.
+      const hp = form.querySelector<HTMLInputElement>('input[name="website"]');
+      if (hp && hp.value) {
+        window.location.href = gracias;
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      // Sin webhook configurado todavía: fallback a email.
+      if (!webhook) {
+        showError(
+          'El formulario aún no está conectado. Escríbenos a info@tenerifecoworking.es mientras tanto.',
+        );
+        return;
+      }
+
+      setSending(true);
+      try {
+        const data = Object.fromEntries(new FormData(form).entries());
+        const res = await fetch(webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        window.location.href = gracias;
+      } catch (err) {
+        setSending(false);
+        showError(
+          'No se pudo enviar. Inténtalo de nuevo o escríbenos a info@tenerifecoworking.es.',
+        );
+      }
+    });
+  });
+</script>

@@ -1,0 +1,145 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Base from '../../layouts/Base.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { url, asset } from '../../lib/url';
+import { formatPrecio } from '../../lib/format';
+import { TIPO_LABEL } from '../../content.config';
+
+export async function getStaticPaths() {
+  const espacios = await getCollection('espacios', ({ data }) => !data.draft);
+  return espacios.map((espacio) => ({
+    params: { slug: espacio.id },
+    props: { espacio },
+  }));
+}
+
+const { espacio } = Astro.props;
+const d = espacio.data;
+const { Content } = await render(espacio);
+
+const datos = [
+  d.capacidad && { icon: 'lucide:users', label: 'Capacidad', value: `${d.capacidad} personas` },
+  d.superficie && { icon: 'lucide:ruler', label: 'Superficie', value: `${d.superficie} m²` },
+  { icon: 'lucide:tag', label: 'Tipo', value: TIPO_LABEL[d.tipo] },
+  { icon: 'lucide:map-pin', label: 'Ubicación', value: `${d.municipio}, ${d.isla}` },
+].filter(Boolean) as { icon: string; label: string; value: string }[];
+---
+
+<Base title={d.title} description={d.description} image={d.imagenPrincipal}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-1.5 text-sm text-[var(--text-muted)] mb-6" aria-label="Migas">
+      <a href={url()} class="hover:text-brand-500 transition">Inicio</a>
+      <Icon name="lucide:chevron-right" class="w-4 h-4" />
+      <a href={url('espacios')} class="hover:text-brand-500 transition">Espacios</a>
+      <Icon name="lucide:chevron-right" class="w-4 h-4" />
+      <span class="text-[var(--text-soft)] truncate">{d.title}</span>
+    </nav>
+
+    <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
+      <!-- Columna principal -->
+      <div class="lg:col-span-2">
+        <!-- Galería / hero -->
+        <div class="aspect-[16/9] rounded-2xl overflow-hidden mb-6 bg-brand-100">
+          {
+            d.imagenPrincipal ? (
+              <img
+                src={asset(d.imagenPrincipal)}
+                alt={d.imagenAlt ?? d.title}
+                class="w-full h-full object-cover"
+              />
+            ) : (
+              <div class="w-full h-full grid place-items-center bg-gradient-to-br from-brand-200 to-brand-400">
+                <Icon name="lucide:image" class="w-16 h-16 text-brand-800/30" />
+              </div>
+            )
+          }
+        </div>
+
+        {
+          d.imagenes.length > 0 && (
+            <div class="grid grid-cols-4 gap-3 mb-8">
+              {d.imagenes.slice(0, 4).map((img) => (
+                <div class="aspect-square rounded-xl overflow-hidden bg-brand-100">
+                  <img src={asset(img)} alt="" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+              ))}
+            </div>
+          )
+        }
+
+        <div class="flex items-center gap-2 mb-3">
+          <span class="px-2.5 py-1 rounded-full bg-brand-400/20 text-brand-700 text-xs font-semibold">
+            {TIPO_LABEL[d.tipo]}
+          </span>
+          {
+            d.disponible === false && (
+              <span class="px-2.5 py-1 rounded-full bg-ink-900/10 text-[var(--text-muted)] text-xs font-semibold">
+                No disponible
+              </span>
+            )
+          }
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[var(--text)] mb-2">{d.title}</h1>
+        <p class="flex items-center gap-1.5 text-[var(--text-muted)] mb-6">
+          <Icon name="lucide:map-pin" class="w-4 h-4" />
+          {d.municipio}{d.zona ? `, ${d.zona}` : ''} · {d.isla}
+        </p>
+
+        <!-- Características -->
+        {
+          d.caracteristicas.length > 0 && (
+            <div class="flex flex-wrap gap-2 mb-8">
+              {d.caracteristicas.map((c) => (
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--surface-2)] border border-[var(--card-border)] text-sm text-[var(--text-soft)]">
+                  <Icon name="lucide:check" class="w-4 h-4 text-brand-500" />
+                  {c}
+                </span>
+              ))}
+            </div>
+          )
+        }
+
+        <!-- Descripción (cuerpo Markdown) -->
+        <div class="prose prose-stone dark:prose-invert max-w-none prose-headings:font-display">
+          <Content />
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-1">
+        <div class="lg:sticky lg:top-24 flex flex-col gap-6">
+          <!-- Precio + datos -->
+          <div class="rounded-2xl border border-[var(--card-border)] bg-[var(--card)] p-6">
+            <p class="text-2xl font-extrabold text-brand-600 mb-4">
+              {formatPrecio(d.precio, d.precioPeriodo, d.precioDesde)}
+            </p>
+            <dl class="space-y-3">
+              {
+                datos.map((item) => (
+                  <div class="flex items-center gap-3">
+                    <Icon name={item.icon} class="w-4 h-4 text-[var(--text-muted)] shrink-0" />
+                    <dt class="text-sm text-[var(--text-muted)]">{item.label}:</dt>
+                    <dd class="text-sm font-medium text-[var(--text)] ml-auto text-right">{item.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+
+          <!-- Formulario de interés -->
+          <div class="rounded-2xl border border-[var(--card-border)] bg-[var(--card)] p-6">
+            <h2 class="font-bold text-lg text-[var(--text)] mb-1">Me interesa</h2>
+            <p class="text-sm text-[var(--text-muted)] mb-5">
+              Déjanos tus datos y te contamos todo sobre este espacio.
+            </p>
+            <LeadForm tipo="inquilino" espacio={d.title} cta="Solicitar información" />
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,72 @@
+---
+import { url, asset } from '../lib/url';
+
+const year = new Date().getFullYear();
+
+const cols = [
+  {
+    title: 'Espacios',
+    links: [
+      { label: 'Todos los espacios', href: url('espacios') },
+      { label: 'Oficinas', href: url('espacios') },
+      { label: 'Salas de reuniones', href: url('espacios') },
+      { label: 'Coworking', href: url('espacios') },
+    ],
+  },
+  {
+    title: 'Tenerife Coworking',
+    links: [
+      { label: 'Publica tu espacio', href: url('publica-tu-espacio') },
+      { label: 'Contacto', href: url('contacto') },
+    ],
+  },
+];
+---
+
+<footer class="border-t border-[var(--card-border)] bg-[var(--surface-2)]">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+      <!-- Marca -->
+      <div class="md:col-span-2">
+        <a href={url()} class="flex items-center gap-2.5 mb-3" aria-label="Tenerife Coworking — inicio">
+          <img src={asset('logo.png')} alt="" width="40" height="40" class="rounded-lg" />
+          <span class="font-display font-extrabold text-[var(--text)]">
+            Tenerife<span class="text-brand-500">Coworking</span>
+          </span>
+        </a>
+        <p class="text-sm text-[var(--text-muted)] max-w-xs">
+          Intermediación en alquiler de espacios de trabajo en todas las islas
+          Canarias. Encuentra tu sitio o publica el tuyo.
+        </p>
+      </div>
+
+      {
+        cols.map((col) => (
+          <div>
+            <h3 class="text-sm font-bold text-[var(--text)] mb-3">{col.title}</h3>
+            <ul class="space-y-2">
+              {col.links.map((l) => (
+                <li>
+                  <a href={l.href} class="text-sm text-[var(--text-muted)] hover:text-brand-500 transition">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-10 pt-6 border-t border-[var(--card-border)] flex flex-col sm:flex-row gap-2 justify-between text-xs text-[var(--text-muted)]"
+    >
+      <p>&copy; {year} tenerifecoworking.es · Islas Canarias, España</p>
+      <p>
+        <a href={`mailto:info@tenerifecoworking.es`} class="hover:text-brand-500 transition">
+          info@tenerifecoworking.es
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,96 @@
+---
+import { Icon } from 'astro-icon/components';
+import ThemeToggle from './ThemeToggle.astro';
+import { url, asset } from '../lib/url';
+
+const nav = [
+  { label: 'Espacios', href: url('espacios') },
+  { label: 'Publica tu espacio', href: url('publica-tu-espacio') },
+  { label: 'Contacto', href: url('contacto') },
+];
+
+const current = Astro.url.pathname;
+const isActive = (href: string) => current === href;
+---
+
+<header
+  class="sticky top-0 z-50 backdrop-blur border-b border-[var(--card-border)] bg-[color-mix(in_srgb,var(--surface)_85%,transparent)]"
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href={url()} class="flex items-center gap-2.5 shrink-0" aria-label="Tenerife Coworking — inicio">
+        <img src={asset('logo.png')} alt="" width="36" height="36" class="rounded-lg" />
+        <span class="font-display font-extrabold text-[var(--text)] leading-none">
+          Tenerife<span class="text-brand-500">Coworking</span>
+        </span>
+      </a>
+
+      <!-- Nav desktop -->
+      <nav class="hidden md:flex items-center gap-1" aria-label="Principal">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                'px-3 py-2 rounded-lg text-sm font-medium transition hover:bg-[var(--surface-2)]',
+                isActive(item.href) ? 'text-brand-600' : 'text-[var(--text-soft)]',
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Acciones -->
+      <div class="flex items-center gap-2">
+        <ThemeToggle />
+        <a
+          href={url('espacios')}
+          class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-400 text-[var(--on-accent)] text-sm font-bold transition hover:bg-brand-300"
+        >
+          Ver espacios
+        </a>
+        <!-- Botón menú móvil -->
+        <button
+          type="button"
+          id="menu-toggle"
+          class="md:hidden grid place-items-center w-10 h-10 rounded-full border border-[var(--card-border)] text-[var(--text)]"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+        >
+          <Icon name="lucide:menu" class="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Nav móvil -->
+    <nav
+      id="mobile-nav"
+      class="md:hidden hidden pb-4 flex-col gap-1"
+      aria-label="Principal móvil"
+    >
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="block px-3 py-2.5 rounded-lg text-[var(--text-soft)] font-medium hover:bg-[var(--surface-2)]"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('menu-toggle');
+  const nav = document.getElementById('mobile-nav');
+  btn?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('hidden');
+    nav?.classList.toggle('flex', !open);
+    btn.setAttribute('aria-expanded', String(!open));
+  });
+</script>
