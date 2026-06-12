@@ -59,14 +59,17 @@ const cols = [
     </div>
 
     <div
-      class="mt-10 pt-6 border-t border-[var(--card-border)] flex flex-col sm:flex-row gap-2 justify-between text-xs text-[var(--text-muted)]"
+      class="mt-10 pt-6 border-t border-[var(--card-border)] flex flex-col sm:flex-row gap-3 justify-between text-xs text-[var(--text-muted)]"
     >
       <p>&copy; {year} tenerifecoworking.es · Islas Canarias, España</p>
-      <p>
+      <nav class="flex flex-wrap gap-x-4 gap-y-1" aria-label="Legal">
+        <a href={url('aviso-legal')} class="hover:text-brand-500 transition">Aviso legal</a>
+        <a href={url('privacidad')} class="hover:text-brand-500 transition">Privacidad</a>
+        <a href={url('cookies')} class="hover:text-brand-500 transition">Cookies</a>
         <a href={`mailto:info@tenerifecoworking.es`} class="hover:text-brand-500 transition">
           info@tenerifecoworking.es
         </a>
-      </p>
+      </nav>
     </div>
   </div>
 </footer>
