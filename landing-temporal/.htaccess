@@ -1,0 +1,45 @@
+# tenerifecoworking.es · Landing temporal (fase 0)
+# Catch-all: cualquier URL sirve index.html con 200 + noindex.
+# Esto SOLO funcionará si Apache procesa este .htaccess. Si Plesk va con
+# nginx standalone (sin proxy a Apache), añadir las reglas nginx equivalentes
+# desde el panel — ver README.md.
+
+# ----- Forzar HTTPS -----
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Forzar HTTPS (1 vez, 301)
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Catch-all: si la petición no es un archivo real existente, sirve index.html
+    # NO redirige (rewrite interno) → conserva la URL original con código 200.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^.*$ /index.html [L]
+</IfModule>
+
+# ----- Cabeceras SEO + seguridad -----
+<IfModule mod_headers.c>
+    # Disuade a buscadores de indexar URLs sueltas durante la transición.
+    Header set X-Robots-Tag "noindex, follow"
+
+    # Cache corta: si volvemos atrás, no quiero CDN/clientes cacheando esto días.
+    Header set Cache-Control "public, max-age=300, must-revalidate"
+
+    # Seguridad básica
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ----- Páginas de error: usar la misma landing -----
+ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
+ErrorDocument 500 /index.html
+
+# ----- Ocultar archivos sensibles -----
+<FilesMatch "^(\.htaccess|\.env|README\.md)$">
+    Require all denied
+</FilesMatch>

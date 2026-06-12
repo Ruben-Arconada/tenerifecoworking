@@ -1,0 +1,27 @@
+#!/usr/bin/expect -f
+# Uso: ./.scp-down.exp "ruta_remota" "ruta_local"
+# Password vía env SSHPASS.
+
+set timeout 1800
+set host "82.223.65.247"
+set user "root"
+set password $env(SSHPASS)
+set src [lindex $argv 0]
+set dst [lindex $argv 1]
+
+spawn scp -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=~/.ssh/known_hosts -o PreferredAuthentications=password -o PubkeyAuthentication=no -o NumberOfPasswordPrompts=1 -r $user@$host:$src $dst
+
+expect {
+    -re "password:" {
+        send -- "$password\r"
+        exp_continue
+    }
+    -re "Permission denied" {
+        send_user "\n[AUTH ERROR]\n"
+        exit 2
+    }
+    eof
+}
+
+catch wait result
+exit [lindex $result 3]

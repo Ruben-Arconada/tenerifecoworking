@@ -1,0 +1,35 @@
+#!/usr/bin/expect -f
+# Uso: ./.scp-up.exp "local_paths_space_separated" "ruta_remota"
+# Password vía env SSHPASS.
+
+set timeout 600
+set host "82.223.65.247"
+set user "root"
+set password $env(SSHPASS)
+set src [lindex $argv 0]
+set dst [lindex $argv 1]
+
+# Construir lista de argumentos para scp
+set src_list [split $src " "]
+set scp_args [list "scp" "-o" "StrictHostKeyChecking=accept-new" "-o" "UserKnownHostsFile=~/.ssh/known_hosts" "-o" "PreferredAuthentications=password" "-o" "PubkeyAuthentication=no" "-o" "NumberOfPasswordPrompts=1"]
+foreach f $src_list {
+    lappend scp_args $f
+}
+lappend scp_args "$user@$host:$dst"
+
+eval spawn $scp_args
+
+expect {
+    -re "password:" {
+        send -- "$password\r"
+        exp_continue
+    }
+    -re "Permission denied" {
+        send_user "\n[AUTH ERROR]\n"
+        exit 2
+    }
+    eof
+}
+
+catch wait result
+exit [lindex $result 3]

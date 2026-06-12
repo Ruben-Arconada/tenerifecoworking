@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#fbbf2d" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0d0a" media="(prefers-color-scheme: dark)">
+<title>tenerifecoworking.es — Volvemos pronto</title>
+<meta name="description" content="Estamos preparando una nueva plataforma de alquiler de espacios para todas las islas Canarias. Pronto online.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="tenerifecoworking.es — Volvemos pronto">
+<meta property="og:description" content="En breve daremos servicio en todas las islas Canarias.">
+<meta property="og:url" content="https://tenerifecoworking.es/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:image" content="https://tenerifecoworking.es/assets/apple-touch-icon.png">
+
+<!-- Favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+
+<!-- Anti-FOUC: setea data-theme ANTES de pintar. Siempre 'light' o 'dark'. -->
+<script>
+    (function(){
+        var theme = 'light';
+        try {
+            var stored = localStorage.getItem('theme');
+            if (stored === 'dark' || stored === 'light') {
+                theme = stored;
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                theme = 'dark';
+            }
+        } catch(e){}
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+</script>
+
+<style>
+*,*::before,*::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+/* El JS de arriba SIEMPRE setea data-theme="light" o "dark" antes de pintar,
+   así el CSS puede ser determinista sin depender de prefers-color-scheme. */
+
+:root[data-theme="light"] {
+    --bg-1: #fffdf5;
+    --bg-2: #fff8e7;
+    --bg-card: rgba(255, 255, 255, 0.72);
+    --border: rgba(0, 0, 0, 0.08);
+    --border-card: rgba(251, 191, 45, 0.35);
+    --text: #1a1a1a;
+    --text-soft: #3a3a3a;
+    --text-muted: #6b6256;
+    --accent: #fbbf2d;
+    --accent-strong: #e0a516;
+    --shadow: 0 24px 60px -24px rgba(180, 130, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+    --on-accent: #1a1a1a;
+}
+
+:root[data-theme="dark"] {
+    --bg-1: #0e0d0a;
+    --bg-2: #14110a;
+    --bg-card: rgba(28, 24, 16, 0.72);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-card: rgba(251, 191, 45, 0.22);
+    --text: #f5f1e8;
+    --text-soft: #d8d0bc;
+    --text-muted: #978c75;
+    --accent: #fbbf2d;
+    --accent-strong: #ffd24a;
+    --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    --on-accent: #1a1a1a;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1.25rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(1200px 600px at 15% 0%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 60%),
+        radial-gradient(1000px 500px at 90% 100%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    line-height: 1.55;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Toggle día/noche — anclado a la esquina sup. derecha de la card */
+.theme-toggle {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-1) 70%, transparent);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--text);
+    padding: 0;
+    transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+    z-index: 2;
+}
+.theme-toggle:hover {
+    transform: scale(1.05);
+    border-color: var(--accent);
+}
+.theme-toggle:active { transform: scale(0.95); }
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Iconos: el JS garantiza que data-theme está siempre seteado, así que
+   esto es determinista. Mostramos el icono del modo ACTUAL: sol en claro,
+   luna en oscuro. */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"]  .theme-toggle .icon-moon { display: block; }
+
+/* Card central */
+.card {
+    position: relative;
+    max-width: 640px;
+    width: 100%;
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-card);
+    border-radius: 22px;
+    padding: 2.5rem 2.25rem 2.75rem;
+    box-shadow: var(--shadow);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.logo {
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    border-radius: 24px;
+    box-shadow: 0 12px 30px -10px rgba(251, 191, 45, 0.5);
+}
+
+h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.65rem, 4vw, 2.3rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: var(--text);
+}
+
+.lead {
+    margin: 0 0 1.25rem;
+    font-size: 1.05rem;
+    color: var(--text-soft);
+    text-align: center;
+}
+.lead:last-of-type { margin-bottom: 1.75rem; }
+
+.cta-wrap { text-align: center; }
+
+.btn {
+    display: inline-block;
+    padding: 0.9rem 1.6rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 10px 22px -10px rgba(251, 191, 45, 0.7);
+}
+.btn:hover {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 26px -10px rgba(251, 191, 45, 0.8);
+}
+.btn:active { transform: translateY(0); }
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 2.25rem 0 1.75rem;
+}
+
+.en {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+.en h2 {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-strong);
+    font-weight: 700;
+}
+.en p { margin: 0 0 0.6rem; }
+.en a {
+    color: var(--text-soft);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+    transition: color 0.15s, border-color 0.15s;
+}
+.en a:hover {
+    color: var(--accent-strong);
+    border-bottom-color: var(--accent-strong);
+}
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+@media (max-width: 480px) {
+    .card { padding: 2rem 1.5rem; border-radius: 18px; }
+    .logo { width: 96px; height: 96px; border-radius: 20px; }
+    .theme-toggle { top: 10px; right: 10px; width: 36px; height: 36px; }
+    .theme-toggle svg { width: 18px; height: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<main class="card">
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Cambiar entre modo claro y oscuro">
+        <!-- Sol -->
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <!-- Luna -->
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <img class="logo" src="/assets/logo.png" alt="Tenerife Coworking" width="120" height="120">
+
+    <h1>Volvemos pronto.<br>Esta vez, en todas las islas.</h1>
+
+    <p class="lead">
+        Estamos preparando una nueva plataforma de <strong>alquiler de espacios</strong> —
+        oficinas, salas, locales y coworkings — para profesionales y empresas
+        en todo el archipiélago canario.
+    </p>
+
+    <p class="lead">
+        ¿Quieres contactarnos mientras tanto? Escríbenos a
+        <strong>info@tenerifecoworking.es</strong>.
+    </p>
+
+    <div class="cta-wrap">
+        <a class="btn" href="mailto:info@tenerifecoworking.es?subject=Contacto%20desde%20tenerifecoworking.es">
+            Escríbenos
+        </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <section class="en" lang="en">
+        <h2>We'll be back soon</h2>
+        <p>
+            We're building a new platform to rent workspaces — offices, meeting rooms,
+            retail spaces and coworkings — for professionals and businesses across
+            all Canary Islands.
+        </p>
+        <p>
+            Need to reach us in the meantime?
+            Drop us a line at <a href="mailto:info@tenerifecoworking.es?subject=Hello%20from%20tenerifecoworking.es">info@tenerifecoworking.es</a>.
+        </p>
+    </section>
+</main>
+
+<footer>
+    &copy; 2026 tenerifecoworking.es &middot; Islas Canarias, España
+</footer>
+
+<script>
+    (function(){
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function(){
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('theme', next); } catch(e){}
+        });
+    })();
+</script>
+
+</body>
+</html>

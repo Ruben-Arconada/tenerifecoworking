@@ -1,0 +1,8 @@
+User-agent: *
+Disallow:
+
+# Notas:
+# - Permitimos el crawleo para que los buscadores descubran el cambio y
+#   re-evalúen el dominio (no queremos que desaparezca de su índice).
+# - Las páginas devuelven X-Robots-Tag: noindex,follow + meta robots noindex,
+#   así que se rastrean pero no se indexan.

@@ -1,0 +1,11 @@
+accesos.txt
+.env
+.env.*
+*.bak
+.DS_Store
+backups/
+node_modules/
+dist/
+.astro/
+.claude/
+

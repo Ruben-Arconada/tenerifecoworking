@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+# Uso: ./.ssh-run.exp "comando remoto"
+# Lee la password de la variable de entorno SSHPASS (no por argv para no exponerla en ps).
+
+set timeout 300
+set host "82.223.65.247"
+set user "root"
+set password $env(SSHPASS)
+set cmd [lindex $argv 0]
+
+spawn ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=~/.ssh/known_hosts -o PreferredAuthentications=password -o PubkeyAuthentication=no -o NumberOfPasswordPrompts=1 $user@$host $cmd
+
+expect {
+    -re "password:" {
+        send -- "$password\r"
+        exp_continue
+    }
+    -re "Permission denied" {
+        send_user "\n[AUTH ERROR] password rejected\n"
+        exit 2
+    }
+    eof
+}
+
+catch wait result
+exit [lindex $result 3]
