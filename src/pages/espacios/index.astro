@@ -89,34 +89,6 @@ const tiposConEspacios = TIPOS.filter((tipo) =>
 </Base>
 
 <script>
-  const fIsla = document.getElementById('f-isla') as HTMLSelectElement;
-  const fTipo = document.getElementById('f-tipo') as HTMLSelectElement;
-  const fReset = document.getElementById('f-reset');
-  const items = Array.from(document.querySelectorAll<HTMLElement>('.espacio-item'));
-  const count = document.getElementById('count');
-  const empty = document.getElementById('empty');
-  const grid = document.getElementById('grid');
-
-  function apply() {
-    const isla = fIsla.value;
-    const tipo = fTipo.value;
-    let visible = 0;
-    items.forEach((item) => {
-      const ok =
-        (!isla || item.dataset.isla === isla) && (!tipo || item.dataset.tipo === tipo);
-      item.style.display = ok ? '' : 'none';
-      if (ok) visible++;
-    });
-    if (count) count.textContent = String(visible);
-    empty?.classList.toggle('hidden', visible > 0);
-    grid?.classList.toggle('hidden', visible === 0);
-  }
-
-  fIsla?.addEventListener('change', apply);
-  fTipo?.addEventListener('change', apply);
-  fReset?.addEventListener('click', () => {
-    fIsla.value = '';
-    fTipo.value = '';
-    apply();
-  });
+  import { initCatalog } from '../../scripts/catalog';
+  initCatalog();
 </script>

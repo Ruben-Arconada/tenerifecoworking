@@ -8,9 +8,9 @@ const cols = [
     title: 'Espacios',
     links: [
       { label: 'Todos los espacios', href: url('espacios') },
-      { label: 'Oficinas', href: url('espacios') },
-      { label: 'Salas de reuniones', href: url('espacios') },
-      { label: 'Coworking', href: url('espacios') },
+      { label: 'Oficinas', href: `${url('espacios')}?tipo=oficina` },
+      { label: 'Salas de reuniones', href: `${url('espacios')}?tipo=sala-reuniones` },
+      { label: 'Coworking', href: `${url('espacios')}?tipo=coworking` },
     ],
   },
   {
